@@ -1,4 +1,13 @@
+const ScoreNames = {
+    0: "Love",
+    1: "Fifteen",
+    2: "Thirty",
+    3: "Forty"
+}
+
 class TennisGame1 {
+    static get SCORENAMES() { return ScoreNames; }
+
     constructor(playerOneName, playerTwoName) {
         this.playerOneScore = 0;
         this.playerTwoScore = 0;
@@ -12,60 +21,62 @@ class TennisGame1 {
             this.playerTwoScore += 1;
     }
     getScore() {
-        var score = "";
-        var tempScore = 0;
-        if (this.playerOneScore === this.playerTwoScore) {
-            switch (this.playerOneScore) {
-                case 0:
-                    score = "Love-All";
-                    break;
-                case 1:
-                    score = "Fifteen-All";
-                    break;
-                case 2:
-                    score = "Thirty-All";
-                    break;
-                default:
-                    score = "Deuce";
-                    break;
-            }
-        }
-        else if (this.playerOneScore >= 4 || this.playerTwoScore >= 4) {
-            var minusResult = this.playerOneScore - this.playerTwoScore;
-            if (minusResult === 1)
-                score = "Advantage player1";
-            else if (minusResult === -1)
-                score = "Advantage player2";
-            else if (minusResult >= 2)
-                score = "Win for player1";
-            else
-                score = "Win for player2";
-        }
+        if (this._isScoreEqual())
+            return this._getEqualScoreResult();
+        if (this._isWon())
+            return this._getWinningPlayerResult();
+        if (this._isAdvantagePoint())
+            return this._getAdvantageResult();
         else {
-            for (var i = 1; i < 3; i++) {
-                if (i === 1)
-                    tempScore = this.playerOneScore;
-                else {
-                    score += "-";
-                    tempScore = this.playerTwoScore;
-                }
-                switch (tempScore) {
-                    case 0:
-                        score += "Love";
-                        break;
-                    case 1:
-                        score += "Fifteen";
-                        break;
-                    case 2:
-                        score += "Thirty";
-                        break;
-                    case 3:
-                        score += "Forty";
-                        break;
-                }
-            }
+            return this._getRegularScoreResult();
         }
-        return score;
+    }
+
+    _getRegularScoreResult() {
+        return this._nameForScore(this.playerOneScore) + "-" + this._nameForScore(this.playerTwoScore);
+    }
+
+    _nameForScore(score) {
+        return TennisGame1.SCORENAMES[score];
+    }
+
+    _getWinningPlayerResult() {
+        return "Win for " + this._highestScoringPlayer();
+    }
+
+    _isWon() {
+        return this._isEndGamePhase() && this._scoreDifference() >= 2;
+    }
+
+    _getAdvantageResult() {
+        return "Advantage " + this._highestScoringPlayer();
+    }
+
+    _isAdvantagePoint() {
+        return this._isEndGamePhase() && this._scoreDifference() === 1;
+    }
+
+    _scoreDifference() {
+        return Math.abs(this.playerOneScore - this.playerTwoScore);
+    }
+
+    _isEndGamePhase() {
+        return this.playerOneScore >= 4 || this.playerTwoScore >= 4;
+    }
+
+    _getEqualScoreResult() {
+        if(this.playerOneScore >= 3) return "Deuce";
+        return this._nameForScore(this.playerOneScore) + "-All";
+    }
+
+    _isScoreEqual() {
+        return this.playerOneScore === this.playerTwoScore;
+    }
+
+    _highestScoringPlayer() {
+        if(this.playerOneScore > this.playerTwoScore)
+            return this.playerOneName;
+        return this.playerTwoName;
     }
 }
 
