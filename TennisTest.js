@@ -1,7 +1,7 @@
-console.log(typeof TennisGame1);
-if (typeof TennisGame1 !== "function") {
-    var TennisGame1 = require("./TennisGame1.js");
-}
+// console.log(typeof TennisGame1);
+// if (typeof TennisGame1 !== "function") {
+//     var TennisGame1 = require("./TennisGame1.js");
+// }
 
 var allScores = [
     [0, 0, "Love-All"],
