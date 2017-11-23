@@ -1,4 +1,4 @@
-# Tennis in JavaScript
+# Tennis Refactoring Kata in JavaScript
 
 Tests are available to be run both with node.js and in the browser.
 For node, simply call
